@@ -11,11 +11,11 @@ const url = import.meta.resolve("./types/web.d.ts");
 
 console.log("Generating doc nodes...");
 
-const nodes = await doc(url, { includeAll: true });
+const nodes = await doc([url], { includeAll: true });
 
 console.log("Generating html files...");
 
-const files = await generateHtml({ [url]: nodes }, {
+const files = await generateHtml(nodes, {
   packageName: "Web",
   categoryDocs,
   disableSearch: true,

@@ -1,4 +1,4 @@
-import { doc, DocNode, generateHtml } from "@deno/doc";
+import { doc, generateHtml } from "@deno/doc";
 import { expandGlob } from "@std/fs";
 import {
   hrefResolver,
@@ -16,15 +16,11 @@ const newRewriteMap = Object.fromEntries(
   ) => [import.meta.resolve(val), key]),
 );
 
-const nodesByUrl: Record<string, DocNode[]> = {};
-
 console.log("Generating doc nodes...");
 
-for await (const file of expandGlob("./types/node/[!_]*")) {
-  const path = `file://${file.path}`;
+const paths = (await Array.fromAsync(expandGlob("./types/node/[!_]*"))).map((file) => `file://${file.path}`);
 
-  nodesByUrl[path] = await doc(path);
-}
+const nodesByUrl = await doc(paths);
 
 console.log("Generating html files...");
 
