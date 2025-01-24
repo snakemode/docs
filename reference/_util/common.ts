@@ -31,3 +31,20 @@ export function flattenItems(
 }
 
 export const nbsp = "\u00A0";
+
+export function createSymbolLookupMap(items: Map<string, SymbolDoc<DocNodeBase>[]>) {
+  const symbolLookup = new Map<string, SymbolDoc[]>();
+  for (const [_, symbols] of items.entries()) {
+    for (const symbol of symbols) {
+      if (!symbolLookup.has(symbol.identifier)) {
+        symbolLookup.set(symbol.identifier, []);
+      }
+
+      const existing = symbolLookup.get(symbol.identifier) || [];
+      existing.push(symbol);
+      symbolLookup.set(symbol.identifier, existing);
+    }
+  }
+
+  return symbolLookup;
+}

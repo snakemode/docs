@@ -21,6 +21,7 @@ export interface SymbolDoc<T = DocNodeBase> {
   namespace: string;
   package: string;
   identifier: string;
+  url: string;
 
   data: T;
 }
@@ -99,6 +100,7 @@ export type ReferenceContext = {
   root: string;
   packageName: string;
   symbols: SymbolDoc[];
+  symbolLookup: Map<string, SymbolDoc<DocNodeBase>[]>;
   currentCategoryList: Map<string, WebCategoryDetails>;
 };
 

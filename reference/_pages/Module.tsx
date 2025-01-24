@@ -32,7 +32,7 @@ export function Module({ item, context }: Props) {
             </div>
           </div>
           <div>
-            <JsDocDescription jsDoc={item.data.jsDoc} />
+            <JsDocDescription jsDoc={item.data.jsDoc} context={context} />
           </div>
         </article>
         <div>{item.data.declarationKind}</div>

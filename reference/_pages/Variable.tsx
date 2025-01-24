@@ -26,7 +26,7 @@ export default function* getPages(
 }
 
 export function Variable({ item, context }: Props) {
-  const { details, toc } = getSymbolDetails(item);
+  const { details, toc } = getSymbolDetails(item, context);
 
   const category = getCategoryFromTag(item);
 
@@ -58,7 +58,7 @@ export function Variable({ item, context }: Props) {
           </div>
           <div>
             {nodeCompatibilityElement}
-            <JsDocDescription jsDoc={item.data.jsDoc} />
+            <JsDocDescription jsDoc={item.data.jsDoc} context={context} />
             <VariableType type={item.data.variableDef} />
           </div>
           <div>

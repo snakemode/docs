@@ -55,7 +55,7 @@ export function Function({ name, data, context }: Props) {
             />
           </div>
           <div>
-            <JsDocDescription jsDoc={data.jsDoc} />
+            <JsDocDescription jsDoc={data.jsDoc} context={context} />
           </div>
           <MemberSection title="Parameters">
             {data.functionDef.params.map((param) => (

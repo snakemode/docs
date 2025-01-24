@@ -3,9 +3,11 @@ import getCategoryPages from "./_pages/Category.tsx";
 import { getCategories } from "./_categories/categoryBuilding.ts";
 import { cliNow } from "../timeUtils.ts";
 import { getAllSymbols } from "./_util/symbolLoading.ts";
-import { ReferenceContext } from "./types.ts";
+import { ReferenceContext, SymbolDoc } from "./types.ts";
 import { log } from "lume/core/utils/log.ts";
 import { packages, root, sections } from "./config.ts";
+import { DocNodeBase } from "@deno/doc/types";
+import { createSymbolLookupMap } from "./_util/common.ts";
 
 export const layout = "raw.tsx";
 
@@ -28,6 +30,7 @@ export default async function* () {
     }
 
     const allSymbols = await getAllSymbols(packages);
+    const symbolLookup = createSymbolLookupMap(allSymbols);
 
     for (const [packageName, symbols] of allSymbols.entries()) {
       const categories = getCategories(packageName, symbols, sections);
@@ -36,6 +39,7 @@ export default async function* () {
         root,
         packageName,
         symbols,
+        symbolLookup,
         currentCategoryList: categories,
       };
 

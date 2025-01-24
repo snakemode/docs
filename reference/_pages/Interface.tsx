@@ -24,7 +24,7 @@ export default function* getPages(
 }
 
 export function Interface({ data, context }: Props) {
-  const { details, toc } = getSymbolDetails(data);
+  const { details, toc } = getSymbolDetails(data, context);
 
   return (
     <ReferencePage

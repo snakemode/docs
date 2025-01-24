@@ -1,10 +1,10 @@
 import { DocNodeClass } from "@deno/doc/types";
 import { CodeIcon } from "./CodeIcon.tsx";
 import { MarkdownContent } from "../primitives/MarkdownContent.tsx";
-import { SymbolDoc } from "../../types.ts";
+import { ReferenceContext, SymbolDoc } from "../../types.ts";
 
 export function SymbolSummaryItem(
-  { item }: { item: SymbolDoc },
+  { item, context }: { item: SymbolDoc, context: ReferenceContext },
 ) {
   const displayName = item.fullName || item.name;
   const firstLine = item.data.jsDoc?.doc?.split("\n\n")[0];
@@ -18,7 +18,7 @@ export function SymbolSummaryItem(
         <a href={`~/${item.identifier}`}>
           {displayName}
         </a>
-        <MarkdownContent text={firstLine} />
+        <MarkdownContent text={firstLine} context={context} />
         <MethodLinks item={item} />
       </div>
     </div>

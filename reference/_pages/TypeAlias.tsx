@@ -51,7 +51,7 @@ export function TypeAlias({ item, context }: Props) {
           </div>
           <div>
             {nodeCompatibilityElement}
-            <JsDocDescription jsDoc={item.data.jsDoc} />
+            <JsDocDescription jsDoc={item.data.jsDoc} context={context} />
           </div>
         </article>
         <MemberSection title="Definition">

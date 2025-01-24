@@ -39,7 +39,7 @@ export function Enum({ item, context }: Props) {
             </div>
           </div>
           <div>
-            <JsDocDescription jsDoc={item.data.jsDoc} />
+            <JsDocDescription jsDoc={item.data.jsDoc} context={context} />
           </div>
           <MemberSection title="Members">
             {item.data.enumDef.members.map((member) => (

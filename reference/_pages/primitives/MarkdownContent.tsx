@@ -1,8 +1,12 @@
 import { markdownRenderer } from "../../../_config.markdown.ts";
+import { ReferenceContext } from "../../types.ts";
 import { insertLinkCodes } from "./LinkCode.tsx";
 
 export function MarkdownContent(
-  { text }: { text: string | undefined | null },
+  { text, context }: {
+    text: string | undefined | null;
+    context: ReferenceContext;
+  },
 ) {
   if (!text) {
     return null;
@@ -10,7 +14,7 @@ export function MarkdownContent(
 
   const renderedDescription = markdownRenderer.render(text);
   const withCustomSubstitutions = replaceCustomTokens(renderedDescription);
-  const withLinkCode = insertLinkCodes(withCustomSubstitutions);
+  const withLinkCode = insertLinkCodes(withCustomSubstitutions, context);
 
   const paragraphs = withLinkCode
     .split(/\n\n+/)

@@ -65,7 +65,7 @@ export function CategorySummary(
         data-dark-theme="dark"
         class="markdown-body"
       >
-        <MarkdownContent text={summary || ""} />
+        <MarkdownContent text={summary || ""} context={context} />
       </div>
     </section>
   );

@@ -64,7 +64,7 @@ export function Namespace({ data, context }: Props) {
             </div>
           </div>
           <div>
-            <JsDocDescription jsDoc={data.data.jsDoc} />
+            <JsDocDescription jsDoc={data.data.jsDoc} context={context} />
           </div>
         </article>
         {detailSections.map(([title, kind]) => {
@@ -73,7 +73,7 @@ export function Namespace({ data, context }: Props) {
               title={title}
               children={children.filter((x) => x.data.kind === kind).map(
                 (x) => {
-                  return <SymbolSummaryItem item={x} />;
+                  return <SymbolSummaryItem item={x} context={context} />;
                 },
               )}
             />

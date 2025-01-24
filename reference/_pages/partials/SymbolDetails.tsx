@@ -2,6 +2,7 @@ import { ClassConstructorDef, DocNode } from "@deno/doc/types";
 import {
   ClosureContent,
   hasJsDoc,
+  ReferenceContext,
   SymbolDoc,
   ValidMethodType,
   ValidPropertyWithOptionalJsDoc,
@@ -19,24 +20,32 @@ import {
 import { PropertyBadges } from "./Badges.tsx";
 import { PropertyName } from "../primitives/PropertyName.tsx";
 
-export function getSymbolDetails(data: SymbolDoc<DocNode>) {
+export function getSymbolDetails(
+  data: SymbolDoc<DocNode>,
+  context: ReferenceContext,
+) {
   const members = getMembers(data);
 
   const details = [
-    <JsDocDescription jsDoc={data.data.jsDoc} />,
+    <JsDocDescription jsDoc={data.data.jsDoc} context={context} />,
     <Constructors data={members.constructors} />,
-    <Properties properties={members.properties} />,
-    <Methods parent={data} methods={members.methods} />,
+    <Properties properties={members.properties} context={context} />,
+    <Methods parent={data} methods={members.methods} context={context} />,
   ];
 
   if (members.kind === "class") {
     details.pop();
     details.push(
-      <Methods parent={data} methods={members.instanceMethods || []} />,
+      <Methods
+        parent={data}
+        methods={members.instanceMethods || []}
+        context={context}
+      />,
       <Methods
         parent={data}
         methods={members.staticMethods || []}
         label={"Static Methods"}
+        context={context}
       />,
     );
   }
@@ -125,10 +134,11 @@ function getMembers(x: SymbolDoc<DocNode>): ClosureContent {
 }
 
 function Methods(
-  { parent, methods, label = "Methods" }: {
+  { parent, methods, label = "Methods", context }: {
     parent: SymbolDoc<DocNode>;
     methods: ValidMethodType[];
     label?: string;
+    context: ReferenceContext;
   },
 ) {
   if (methods.length === 0) {
@@ -138,19 +148,25 @@ function Methods(
   return (
     <MemberSection title={label}>
       {methods.map((method) => {
-        return <MethodSummary parent={parent} method={method} />;
+        return (
+          <MethodSummary parent={parent} method={method} context={context} />
+        );
       })}
     </MemberSection>
   );
 }
 
 function MethodSummary(
-  { parent, method }: { parent: SymbolDoc<DocNode>; method: ValidMethodType },
+  { parent, method, context }: {
+    parent: SymbolDoc<DocNode>;
+    method: ValidMethodType;
+    context: ReferenceContext;
+  },
 ) {
   const detailedSection = hasJsDoc(method)
     ? (
       <DetailedSection>
-        <MarkdownContent text={method.jsDoc.doc} />
+        <MarkdownContent text={method.jsDoc.doc} context={context} />
       </DetailedSection>
     )
     : null;
@@ -170,7 +186,10 @@ function MethodSummary(
 }
 
 function Properties(
-  { properties }: { properties: ValidPropertyWithOptionalJsDoc[] },
+  { properties, context }: {
+    properties: ValidPropertyWithOptionalJsDoc[];
+    context: ReferenceContext;
+  },
 ) {
   if (properties.length === 0) {
     return <></>;
@@ -178,20 +197,23 @@ function Properties(
 
   return (
     <MemberSection title="Properties">
-      {properties.map((prop) => <PropertyItem property={prop} />)}
+      {properties.map((prop) => (
+        <PropertyItem property={prop} context={context} />
+      ))}
     </MemberSection>
   );
 }
 
 function PropertyItem(
-  { property }: {
+  { property, context }: {
     property: ValidPropertyWithOptionalJsDoc;
+    context: ReferenceContext;
   },
 ) {
   const jsDocSection = property.jsDoc?.doc
     ? (
       <DetailedSection>
-        <MarkdownContent text={property.jsDoc?.doc} />
+        <MarkdownContent text={property.jsDoc?.doc} context={context} />
       </DetailedSection>
     )
     : null;

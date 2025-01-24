@@ -51,13 +51,15 @@ function decorateNodesWithExtraData(
 
   for (const item of items) {
     const identity = generateSymbolIdentity(item, packageName, namespace);
-    const wrapped = {
+    const url = `/api/${packageName.toLocaleLowerCase()}/~/${identity}`;
+    const wrapped: SymbolDoc = {
       name: item.name,
       fullName: identity,
       namespace: namespace,
       package: packageName,
       identifier: identity,
       data: item,
+      url: url,
     };
 
     if (item.kind === "namespace") {

@@ -85,11 +85,17 @@ export function CategoryBrowse({ categoryName, context }: ListingProps) {
     >
       <main>
         {nodeCompatibilityElement}
-        <JsDocDescription jsDoc={jsDocData} />
+        <JsDocDescription jsDoc={jsDocData} context={context} />
         <div className={"space-y-7"}>
           {detailSections.map(([title, kind]) => {
             const matching = itemsOfType.get(kind) || [];
-            return <CategoryPageSection title={title} items={matching} />;
+            return (
+              <CategoryPageSection
+                title={title}
+                items={matching}
+                context={context}
+              />
+            );
           })}
         </div>
       </main>
@@ -132,7 +138,11 @@ function AllSymbolsBrowse({ context }: AllSymbolsBrowseProps) {
     >
       <main>
         <div className={"space-y-7"}>
-          <CategoryPageSection title={"Default"} items={allItems} />;
+          <CategoryPageSection
+            title={"Default"}
+            items={allItems}
+            context={context}
+          />;
         </div>
       </main>
     </ReferencePage>
@@ -140,7 +150,11 @@ function AllSymbolsBrowse({ context }: AllSymbolsBrowseProps) {
 }
 
 function CategoryPageSection(
-  { title, items }: { title: string; items: SymbolDoc[] },
+  { title, items, context }: {
+    title: string;
+    items: SymbolDoc[];
+    context: ReferenceContext;
+  },
 ) {
   if (items.length === 0) {
     return null;
@@ -151,7 +165,12 @@ function CategoryPageSection(
     <section id={anchorId} className={"section"}>
       <AnchorableHeading anchor={anchorId}>{title}</AnchorableHeading>
       <div className={"namespaceSection"}>
-        {items.map((item) => <SymbolSummaryItem item={item} />)}
+        {items.map((item) => (
+          <SymbolSummaryItem
+            item={item}
+            context={context}
+          />
+        ))}
       </div>
     </section>
   );

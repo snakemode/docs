@@ -1,3 +1,5 @@
+import { ReferenceContext } from "../../types.ts";
+
 export function LinkCode({ symbol }: { symbol: string }) {
   const target = "~/" + symbol;
 
@@ -8,7 +10,7 @@ export function LinkCode({ symbol }: { symbol: string }) {
   );
 }
 
-export function insertLinkCodes(text: string) {
+export function insertLinkCodes(text: string, context: ReferenceContext) {
   // replace each text occurance of {@linkcode foo} with <LinkCode symbol="foo" />
   if (!text) {
     return "";
@@ -36,19 +38,37 @@ export function insertLinkCodes(text: string) {
       );
     }
 
-    const href = url.startsWith("http") ? url : "~/" + url;
-    return `<a href="${href}"><code>${title}</code></a>`;
+    if (url.startsWith("http")) {
+      return `<a href="${url}"><code>${title}</code></a>`;
+    }
+
+    if (!context || context.symbolLookup === undefined) {
+      console.log("context", context);
+      throw new Error("context.symbolLookup is undefined");
+    }
+
+    // Work out what symbol this is referencing.
+    if (context.symbolLookup.has(url)) {
+      const symbolOptions = context.symbolLookup.get(url);
+      if (symbolOptions) {
+        // We'll take the first for now, perhaps find the one in the nearest package
+        const target = symbolOptions[0].url;
+        return `<a href="${target}"><code>${title}</code></a>`;
+      }
+    }
+
+    return `<code>${title}</code>`;
   });
 
   return partsAfterSub.join("").trim();
 }
 
-export function linkCodeAndParagraph(text: string) {
+export function linkCodeAndParagraph(text: string, context: ReferenceContext) {
   if (!text?.trim()) {
     return null;
   }
 
-  const withLinkCode = insertLinkCodes(text);
+  const withLinkCode = insertLinkCodes(text, context);
 
   const paragraphs = withLinkCode
     .split(/\n\n+/)
