@@ -3,10 +3,9 @@ import getCategoryPages from "./_pages/Category.tsx";
 import { getCategories } from "./_categories/categoryBuilding.ts";
 import { cliNow } from "../timeUtils.ts";
 import { getAllSymbols } from "./_util/symbolLoading.ts";
-import { ReferenceContext, SymbolDoc } from "./types.ts";
+import { ReferenceContext } from "./types.ts";
 import { log } from "lume/core/utils/log.ts";
 import { packages, root, sections } from "./config.ts";
-import { DocNodeBase } from "@deno/doc/types";
 import { createSymbolLookupMap } from "./_util/common.ts";
 
 export const layout = "raw.tsx";
